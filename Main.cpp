@@ -8,17 +8,20 @@ void processInput(GLFWwindow *window);
 
 //vertex shader source code
 const char *vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 0)  in vec3 aPos;\n"
+"out vec4 vertexColor;"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f);\n"
+"vertexColor = vec4(0.5f, 0.0f, 0.0f, 1.0f);\n"
 "}\0";
 
 const char *fragmentShaderSource = "#version 330 core\n"
+"uniform vec4 ourColor;"
 "out vec4 FragColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"   FragColor = ourColor;\n"
 "}\0";
 
 // settings
@@ -109,7 +112,7 @@ int main()
 	glUseProgram(shaderProgram);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	//shderProgrma finished
+	//shderProgram finished
 
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f,
@@ -151,8 +154,21 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+
+
+
+
 		//draw triangle
+		//activate the shader
 		glUseProgram(shaderProgram);
+		//update the uniform color
+		float timeValue = glfwGetTime();
+		float greenValue = sin(timeValue) / 2.0f + 0.5f;
+		int vertexColorLoaction = glGetUniformLocation(shaderProgram, "ourColor");
+		glUniform4f(vertexColorLoaction, 0.0f, greenValue, 0.0f, 1.0f);
+
+
+		//Now render the triangle
 		glBindVertexArray(VAO);//// seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 							   //Some draw function
 		glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -193,3 +209,4 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
+
