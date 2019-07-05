@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include"Shader_h.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -103,7 +104,7 @@ int main()
 
 
 	//Create a shader program
-	int shaderProgram = glCreateProgram();
+	/*int shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
@@ -116,7 +117,8 @@ int main()
 	}
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	//shderProgram finished
+	//shderProgram finished*/
+	Shader ourShader = Shader(vertexShaderSource, fragmentShaderSource);
 
 	float vertices[] = {
 			//position           //color
@@ -142,7 +144,7 @@ int main()
 
 
 
-	glUseProgram(shaderProgram);
+	ourShader.use();
 
 
 
